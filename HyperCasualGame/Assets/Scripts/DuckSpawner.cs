@@ -7,11 +7,11 @@ public class DuckSpawner : MonoBehaviour
     public Ducks ducks;
     public DuckPositions duckPositions;
     private int tapCounter;
-    public int type1DuckCounter;
-    public int type2DuckCounter;
-    public int type3DuckCounter;
-    public int type4DuckCounter;
-    public int type5DuckCounter;
+    private int type1DuckCounter;
+    private int type2DuckCounter;
+    private int type3DuckCounter;
+    private int type4DuckCounter;
+    private int type5DuckCounter;
     public List<GameObject> spawnedDucks;
 
     void Start()
