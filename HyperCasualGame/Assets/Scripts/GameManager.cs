@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using TMPro;
+using GameAnalyticsSDK;
+using Facebook.Unity;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,6 +20,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        FB.Init();
+        GameAnalytics.Initialize();
+        GameAnalytics.NewDesignEvent("Event Started");
         save = new PlayerData();
         save.StartGame();
         numberOfTapsHighScoreText.text = save.GetPlayerTapHighScore().ToString();
@@ -31,6 +36,7 @@ public class GameManager : MonoBehaviour
 
     public void OnPauseButtonClick()
     {
+        GameAnalytics.NewDesignEvent("Game Paused");
         pauseScreen.SetActive(true);
         duckSpawner.tapsEnabled = false;
     }

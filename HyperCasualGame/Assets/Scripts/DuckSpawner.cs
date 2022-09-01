@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using GameAnalyticsSDK;
 
 public class DuckSpawner : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class DuckSpawner : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && tapsEnabled)
         {
+            GameAnalytics.NewDesignEvent("Tap Happened");
             tapCounter++;
             if(type1DuckCounter < 10)
             {
@@ -102,6 +104,7 @@ public class DuckSpawner : MonoBehaviour
     {
         GameObject newDuckType = Instantiate(ducks.duckPrefabs[duckType], duckPositions.possibleDuckPositions[spawnedDucks.Count], Quaternion.Euler(new Vector3(-90, 0, -90)));
         spawnedDucks.Add(newDuckType);
+        GameAnalytics.NewDesignEvent("Merge Happened");
     }
 
     private void UpdateUI()
