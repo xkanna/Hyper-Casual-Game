@@ -58,7 +58,9 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\DuckSpawner.cs" />
     <Compile Include="Assets\Scripts\Ducks.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\DuckPositions.cs" />
+    <Compile Include="Assets\Scripts\PlayerData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

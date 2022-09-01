@@ -17,21 +17,24 @@ public class DuckSpawner : MonoBehaviour
     public List<GameObject> spawnedDucks;
     public TextMeshProUGUI numberOfTapsText;
     public TextMeshProUGUI numberOfMergesText;
+    public TextMeshProUGUI numberOfTapsHighScoreText;
+    public TextMeshProUGUI numberOfMergesHighScoreText;
+    public GameObject explosion;
+    public bool tapsEnabled;
+    public PlayerData save;
 
     void Start()
     {
-        tapCounter = 0;
-        type1DuckCounter = 0;
-        type2DuckCounter = 0;
-        type3DuckCounter = 0;
-        type4DuckCounter = 0;
-        type5DuckCounter = 0;
+        save = new PlayerData();
+        tapsEnabled = false;
+        InitializeCounters();
+        UpdateUI();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && tapsEnabled)
         {
             tapCounter++;
             if(type1DuckCounter < 10)
@@ -43,73 +46,93 @@ public class DuckSpawner : MonoBehaviour
             else if (type1DuckCounter == 10)
             {
                 type1DuckCounter = 0;
-                
-                for(int i = 0; i < 10; i++)
-                {
-                    Destroy(spawnedDucks[spawnedDucks.Count - 1]);
-                    spawnedDucks.Remove(spawnedDucks[spawnedDucks.Count - 1]);
-                }
-
-                GameObject newDuckType2 = Instantiate(ducks.duckPrefabs[1], duckPositions.possibleDuckPositions[spawnedDucks.Count], Quaternion.Euler(new Vector3(-90, 0, -90)));
+                Destroy10Ducks();
                 type2DuckCounter++;
-                spawnedDucks.Add(newDuckType2);
+                InstantiateNewDuck(1);
                 mergeCounter++;
+                save.UpdateMergeValue();
             }
 
             if (type2DuckCounter == 10)
             {
                 type2DuckCounter = 0;
-
-                for (int i = 0; i < 10; i++)
-                {
-                    Destroy(spawnedDucks[spawnedDucks.Count - 1]);
-                    spawnedDucks.Remove(spawnedDucks[spawnedDucks.Count - 1]);
-                }
-
+                Destroy10Ducks();
                 type3DuckCounter++;
-                GameObject newDuckType3 = Instantiate(ducks.duckPrefabs[2], duckPositions.possibleDuckPositions[spawnedDucks.Count], Quaternion.Euler(new Vector3(-90, 0, -90)));
-                spawnedDucks.Add(newDuckType3);
+                InstantiateNewDuck(2);
                 mergeCounter++;
+                save.UpdateMergeValue();
             }
 
             if (type3DuckCounter == 10)
             {
                 type3DuckCounter = 0;
-
-                for (int i = 0; i < 10; i++)
-                {
-                    Destroy(spawnedDucks[spawnedDucks.Count - 1]);
-                    spawnedDucks.Remove(spawnedDucks[spawnedDucks.Count - 1]);
-                }
-
+                Destroy10Ducks();
                 type4DuckCounter++;
-                GameObject newDuckType4 = Instantiate(ducks.duckPrefabs[3], duckPositions.possibleDuckPositions[spawnedDucks.Count], Quaternion.Euler(new Vector3(-90, 0, -90)));
-                spawnedDucks.Add(newDuckType4);
+                InstantiateNewDuck(3);
                 mergeCounter++;
+                save.UpdateMergeValue();
             }
 
             if (type4DuckCounter == 10)
             {
                 type4DuckCounter = 0;
-
-                for (int i = 0; i < 10; i++)
-                {
-                    Destroy(spawnedDucks[spawnedDucks.Count - 1]);
-                    spawnedDucks.Remove(spawnedDucks[spawnedDucks.Count - 1]);
-                }
-
+                Destroy10Ducks();
                 type5DuckCounter++;
-                GameObject newDuckType5 = Instantiate(ducks.duckPrefabs[4], duckPositions.possibleDuckPositions[spawnedDucks.Count], Quaternion.Euler(new Vector3(-90, 0, -90)));
-                spawnedDucks.Add(newDuckType5);
+                InstantiateNewDuck(4);
                 mergeCounter++;
+                save.UpdateMergeValue();
             }
+            save.UpdateTapValue();
+            UpdateUI();
         }
-        UpdateUI();
+        
+    }
+
+    private void Destroy10Ducks()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            Destroy(spawnedDucks[spawnedDucks.Count - 1]);
+            Instantiate(explosion, spawnedDucks[spawnedDucks.Count - 1].transform.position, spawnedDucks[spawnedDucks.Count - 1].transform.rotation);
+            spawnedDucks.Remove(spawnedDucks[spawnedDucks.Count - 1]);
+        }
+    }
+
+    private void InstantiateNewDuck(int duckType)
+    {
+        GameObject newDuckType = Instantiate(ducks.duckPrefabs[duckType], duckPositions.possibleDuckPositions[spawnedDucks.Count], Quaternion.Euler(new Vector3(-90, 0, -90)));
+        spawnedDucks.Add(newDuckType);
     }
 
     private void UpdateUI()
     {
         numberOfTapsText.text = tapCounter.ToString();
         numberOfMergesText.text = mergeCounter.ToString();
+        numberOfTapsHighScoreText.text = save.GetPlayerTapHighScore().ToString();
+        numberOfMergesHighScoreText.text = save.GetPlayerMergeHighScore().ToString();
+    }
+
+    public void RestartGame()
+    {
+        int deletionsNumber = spawnedDucks.Count;
+        for (int i = 0; i < deletionsNumber; i++)
+        {
+            Destroy(spawnedDucks[spawnedDucks.Count - 1]);
+            spawnedDucks.Remove(spawnedDucks[spawnedDucks.Count - 1]);
+        }
+
+        InitializeCounters();
+        UpdateUI();
+    }
+
+    private void InitializeCounters()
+    {
+        tapCounter = 0;
+        mergeCounter = 0;
+        type1DuckCounter = 0;
+        type2DuckCounter = 0;
+        type3DuckCounter = 0;
+        type4DuckCounter = 0;
+        type5DuckCounter = 0;
     }
 }
