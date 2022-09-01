@@ -1,4 +1,0 @@
-#Thu Sep 01 21:58:45 CEST 2022
-base.0=E\:\\Unity\\tummygames\\Hyper-Casual-Game\\HyperCasualGame\\Temp\\gradleOut\\launcher\\build\\intermediates\\dex\\release\\mergeDexRelease\\classes.dex
-path.0=classes.dex
-renamed.0=classes.dex

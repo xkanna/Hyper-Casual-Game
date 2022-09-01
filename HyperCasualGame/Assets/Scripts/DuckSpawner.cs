@@ -6,8 +6,13 @@ using GameAnalyticsSDK;
 
 public class DuckSpawner : MonoBehaviour
 {
+    public PlayerData save;
     public Ducks ducks;
     public DuckPositions duckPositions;
+    public List<GameObject> spawnedDucks;
+    public GameObject explosion;
+
+    public bool tapsEnabled;
     private int tapCounter;
     private int mergeCounter;
     private int type1DuckCounter;
@@ -15,15 +20,12 @@ public class DuckSpawner : MonoBehaviour
     private int type3DuckCounter;
     private int type4DuckCounter;
     private int type5DuckCounter;
-    public List<GameObject> spawnedDucks;
+    
     public TextMeshProUGUI numberOfTapsText;
     public TextMeshProUGUI numberOfMergesText;
     public TextMeshProUGUI numberOfTapsHighScoreText;
     public TextMeshProUGUI numberOfMergesHighScoreText;
-    public GameObject explosion;
-    public bool tapsEnabled;
-    public PlayerData save;
-
+    
     void Start()
     {
         save = new PlayerData();
@@ -35,23 +37,24 @@ public class DuckSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && tapsEnabled)
+        if (Input.GetMouseButtonDown(0) && tapsEnabled) //Input.GetTouch(0)
         {
             GameAnalytics.NewDesignEvent("Tap Happened");
             tapCounter++;
-            if(type1DuckCounter < 10)
+
+            if(type1DuckCounter <= 10)
             {
                 GameObject newDuckType1 = Instantiate(ducks.duckPrefabs[0], duckPositions.possibleDuckPositions[spawnedDucks.Count], Quaternion.Euler(new Vector3(-90, 0, -90)));
                 type1DuckCounter++;
                 spawnedDucks.Add(newDuckType1);
             }
-            else if (type1DuckCounter == 10)
+            
+            if (type1DuckCounter == 10)
             {
                 type1DuckCounter = 0;
                 Destroy10Ducks();
                 type2DuckCounter++;
                 InstantiateNewDuck(1);
-                mergeCounter++;
                 save.UpdateMergeValue();
             }
 
@@ -61,7 +64,6 @@ public class DuckSpawner : MonoBehaviour
                 Destroy10Ducks();
                 type3DuckCounter++;
                 InstantiateNewDuck(2);
-                mergeCounter++;
                 save.UpdateMergeValue();
             }
 
@@ -71,7 +73,6 @@ public class DuckSpawner : MonoBehaviour
                 Destroy10Ducks();
                 type4DuckCounter++;
                 InstantiateNewDuck(3);
-                mergeCounter++;
                 save.UpdateMergeValue();
             }
 
@@ -81,13 +82,11 @@ public class DuckSpawner : MonoBehaviour
                 Destroy10Ducks();
                 type5DuckCounter++;
                 InstantiateNewDuck(4);
-                mergeCounter++;
                 save.UpdateMergeValue();
             }
             save.UpdateTapValue();
             UpdateUI();
         }
-        
     }
 
     private void Destroy10Ducks()
@@ -104,6 +103,7 @@ public class DuckSpawner : MonoBehaviour
     {
         GameObject newDuckType = Instantiate(ducks.duckPrefabs[duckType], duckPositions.possibleDuckPositions[spawnedDucks.Count], Quaternion.Euler(new Vector3(-90, 0, -90)));
         spawnedDucks.Add(newDuckType);
+        mergeCounter++;
         GameAnalytics.NewDesignEvent("Merge Happened");
     }
 

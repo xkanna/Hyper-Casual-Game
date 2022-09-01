@@ -8,15 +8,16 @@ using Facebook.Unity;
 
 public class GameManager : MonoBehaviour
 {
+    public PlayerData save;
+    public DuckSpawner duckSpawner;
+
     public GameObject pauseScreen;
     public GameObject splashScreen;
-    public DuckSpawner duckSpawner;
+    
     public Button playButton;
     public Button unPauseButton;
-    public PlayerData save;
     public TextMeshProUGUI numberOfTapsHighScoreText;
     public TextMeshProUGUI numberOfMergesHighScoreText;
-
 
     void Start()
     {
@@ -25,13 +26,13 @@ public class GameManager : MonoBehaviour
         GameAnalytics.NewDesignEvent("Event Started");
         save = new PlayerData();
         save.StartGame();
-        numberOfTapsHighScoreText.text = save.GetPlayerTapHighScore().ToString();
-        numberOfMergesHighScoreText.text = save.GetPlayerMergeHighScore().ToString();
+        UpdateUI();
     }
 
-    void Update()
+    private void UpdateUI()
     {
-        
+        numberOfTapsHighScoreText.text = save.GetPlayerTapHighScore().ToString();
+        numberOfMergesHighScoreText.text = save.GetPlayerMergeHighScore().ToString();
     }
 
     public void OnPauseButtonClick()
