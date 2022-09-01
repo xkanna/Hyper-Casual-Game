@@ -59,5 +59,6 @@ public class GameManager : MonoBehaviour
         duckSpawner.tapsEnabled = true;
         duckSpawner.RestartGame();
         pauseScreen.SetActive(false);
+        save.StartGame();
     }
 }
